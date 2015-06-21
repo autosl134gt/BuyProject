@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test"/>
+	<classpathentry kind="lib" path="C:/Selenium/JAR/opencsv-3.4.jar"/>
+	<classpathentry kind="lib" path="C:/Selenium/JAR/selenium-java-2.45.0.jar" sourcepath="src/main/com/testproject/java/framework/pageobject"/>
+	<classpathentry kind="lib" path="C:/Selenium/JAR/selenium-java-2.45.0-srcs.jar"/>
+	<classpathentry kind="lib" path="C:/Selenium/JAR/selenium-server-standalone-2.45.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" output="target/classes" path="src/main"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
