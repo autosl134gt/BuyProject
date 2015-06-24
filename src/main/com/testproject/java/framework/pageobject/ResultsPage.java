@@ -34,7 +34,7 @@ public class ResultsPage {
 
 	public ResultsPage(WebDriver driver) {
 		mDriver = driver;
-		wait = new WebDriverWait(mDriver, 10);
+		wait = new WebDriverWait(mDriver, 30);
 	}
 
 	public Boolean doesResultLabelIncludeKeyword(String keyword) {
@@ -45,6 +45,10 @@ public class ResultsPage {
 						.getText().trim().toUpperCase().indexOf(keyword.toUpperCase()) >= 0;
 	}
 
+	public String getResultLabel() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(Locators.resultForLabelLocator))).getText();
+	}
+	
 	public String getCountLabel() {
 		return wait.until(
 				ExpectedConditions
@@ -63,6 +67,7 @@ public class ResultsPage {
 	}
 
 	public int getCount() {
+		System.out.println("xx");
 		return mDriver.findElements(By.xpath(Locators.keywordResultTitlesLocator)).size();
 	}
 
@@ -83,15 +88,17 @@ public class ResultsPage {
 	{
 		sortSuggestionLocatorStr = By.xpath(Locators.sortSuggestionLocator + "[" + inputSortKeyNumber + "]");
 
-		WebElement mSuggestion = wait.until(ExpectedConditions.visibilityOfElementLocated(sortSuggestionLocatorStr));
+		wait.until(ExpectedConditions.presenceOfElementLocated(sortSuggestionLocatorStr));
 		
+		WebElement mSuggestion = mDriver.findElement(sortSuggestionLocatorStr);
+	
 		return mSuggestion;
 	}
 	
-	public void clickSortSuggestion(String inputSortKeyNumber) throws InterruptedException
+	public void changeSortOrder(String inputSortKeyNumber) throws InterruptedException
 	{
 		getSortBox().click();
-
+		
 		getSuggestion(inputSortKeyNumber).click();
 	}
 	
@@ -232,6 +239,16 @@ public class ResultsPage {
 			bl = isResultCountLabelDisplayed();
 
 		return bl;
+	}
+	
+	public Integer getHighlightedPage()
+	{
+		indexHighlightedPage = getHighlightedPageIndex();
+		
+		if (verifyClickedPageNumber())
+			return pageFromGetText;
+		else 
+			return 999;		// Error
 	}
 	
 	public void open(String keyword)

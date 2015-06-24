@@ -1,4 +1,3 @@
-
 package com.testproject.java.framework.pageobject;
 
 import org.openqa.selenium.By;
@@ -9,7 +8,7 @@ import java.util.regex.Pattern;
 
 import com.testproject.java.framework.locators.*;
 
-public class DetailItem { 
+public class DetailPage { 
 	
 	WebDriver mDriver;
 	WebElement detailOverviewSection;
@@ -23,7 +22,7 @@ public class DetailItem {
 	int lengthSectionSubInfo;
 	int lengthSection;
 	
-	public DetailItem (WebDriver driver)
+	public DetailPage (WebDriver driver)
 	{
 		mDriver = driver;
 	}
@@ -63,27 +62,9 @@ public class DetailItem {
 		return (Pattern.compile(".*http://www.bestbuy.ca/.*", Pattern.CASE_INSENSITIVE).matcher(srcValue).matches()) && (Pattern.compile(".*jpg.*", Pattern.CASE_INSENSITIVE).matcher(srcValue).matches());
 	}
 	
-	public String getPrice(Boolean resultItemOnSale)
+	public Double getPrice()
 	{
-		String detailPrice = "";
-		
-		if (resultItemOnSale)
-		{
-			detailPrice = mDriver.findElement(By.xpath(Locators.detailPriceOnSaleLocator)).getText();
-		}
-		else
-		{
-			detailPrice = mDriver.findElement(By.xpath(Locators.detailPriceLocator)).getText();	
-		}
-
-		return detailPrice; 
-	}
-	
-	public Boolean isPriceSameAsResultPrice(String resultPrice, Boolean resultItemOnSale)
-	{
-		String detailPrice = getPrice(resultItemOnSale);
-
-		return detailPrice.replace(",", "").toString().equalsIgnoreCase(resultPrice);
+		return Double.parseDouble(Pattern.compile("\\$").matcher(mDriver.findElement(By.xpath(Locators.detailPriceLocator)).getText()).replaceAll(" "));	
 	}
 	
 	public Boolean isOnlinePurchaseInfoDisplayed()
@@ -100,12 +81,10 @@ public class DetailItem {
 	{
 		return mDriver.findElement(By.xpath(Locators.wishListLocator)).isDisplayed();
 	}
-	
-	public Boolean isTitleSameAsResultTitle(String resultItemTitle)
+
+	public String getTitle()
 	{
-		String replResultStr = resultItemTitle.replace("Final Clearance", "").trim();
-		String replDetailStr = mDriver.findElement(By.xpath(Locators.detailItemTitleLocator)).getText().replace("Final Clearance", "").trim();
-		return replResultStr.equalsIgnoreCase(replDetailStr);
+		return mDriver.findElement(By.xpath(Locators.detailItemTitleLocator)).getText().replace("Final Clearance", "").trim();
 	}
 	
 	public Boolean isOverviewTabDispalyed()

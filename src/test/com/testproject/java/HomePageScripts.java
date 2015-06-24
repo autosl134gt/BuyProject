@@ -137,13 +137,7 @@ public class HomePageScripts {
 	@Ignore
 	public void testSearchWithKeyword() throws InterruptedException 
 	{
-		HomePage homePage = new HomePage(driver, keyword);
-
-		homePage.open();
-
-		homePage.typeKeyword();
-
-		ResultsPage resultsPage = homePage.clickSearchButton();
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
 
 		assertTrue(resultsPage.doesResultLabelIncludeKeyword(keyword));
 

@@ -22,7 +22,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.opencsv.CSVReader;
 //import com.opencsv.CSVWriter;
-import com.testproject.java.framework.pageobject.DetailItem;
+import com.testproject.java.framework.pageobject.DetailPage;
 import com.testproject.java.framework.pageobject.HomePage;
 import com.testproject.java.framework.pageobject.ResultItem;
 import com.testproject.java.framework.pageobject.ResultsPage;
@@ -41,9 +41,9 @@ public class ResultsPageScripts {
 	String suggestionValue;
 
 //CSV input	
-	private static String filePath = "D:\\DT\\bestbuy2.txt"; 		/* SORT- testProductSummary() 		*/
+//	private static String filePath = "D:\\DT\\bestbuy2.txt"; 		/* SORT- testProductSummary() 		*/
 //	private static String filePath = "D:\\DT\\bestbuy33.txt"; 		/* SORT-testProducSort() 			*/ 
-//	private static String filePath = "D:\\DT\\bestbuy34.txt"; 		/* SORT-testProducSort() 			*/
+	private static String filePath = "D:\\DT\\bestbuy34.txt"; 		/* SORT-testProducSort() 			*/
 //	private static String filePath = "D:\\DT\\bestbuynull.txt";    /* NAVIGATE Page-testPageNavigate() */ 
 		
 	public ResultsPageScripts(String inputData) 
@@ -96,15 +96,9 @@ public class ResultsPageScripts {
 	@Ignore
 	public void testProductSummary() throws InterruptedException 
 	{
-		HomePage homePage = new HomePage(driver, keyword);
-
-		homePage.open();
-
-		homePage.typeKeyword();
-
-		ResultsPage resultsPage = homePage.clickSearchButton();
-
-		assertTrue(resultsPage.doesResultLabelIncludeKeyword(keyword));
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		
+		assertTrue(resultsPage.getResultLabel().indexOf(keyword) >= 0);
 
 		assertTrue(resultsPage.isResultCountLabelDisplayed());
 
@@ -118,128 +112,60 @@ public class ResultsPageScripts {
 			assertTrue(resultItem.isImageDisplayed());
 			assertTrue(resultItem.isImageUrlValid());
 			assertTrue(resultItem.isPriceDisplayed());
-			assertTrue(resultItem.isPriceValid());
+			assertTrue(resultItem.getPrice() >= 0);
 
 			assertTrue(resultItem.doesNameIncludeKeyword(keyword));
 		}
 	}
 	
-//	Input file: bestbuy2.txt - iPhone 6, Galaxy and iPhone
-	@Test
-	public void testProductDetail() throws InterruptedException 
-	{
-		keyword = inputData; 
-		
-		HomePage homePage = new HomePage(driver, keyword);
-
-		homePage.open();
-
-		homePage.typeKeyword();
-
-		ResultsPage resultsPage = homePage.clickSearchButton();
-
-		ResultItem resultItem;
-		DetailItem detailItem;
-		String resultPrice;
-		Boolean resultItemOnSale;
-		String resultItemTitle;
-		
-		int countResultsPage = resultsPage.getCount();
-		
-		for (int i = 1; i <= countResultsPage; i++) {
-			resultItem = resultsPage.getResult(i);
-			assertTrue(resultItem.isPriceDisplayed());
-			assertTrue(resultItem.isPriceValid());
-			resultPrice = resultItem.getPrice();
-			resultItemOnSale = resultItem.isResultItemOnSale();
-			resultItemTitle = resultItem.getResultItemTitle();
-		
-			detailItem = resultItem.clickResult();
-			assertTrue(detailItem.isImageDisplayed());
-			assertTrue(detailItem.isImageUrlValid());
-			assertTrue(detailItem.isPriceSameAsResultPrice(resultPrice, resultItemOnSale));
-			assertTrue(detailItem.isOnlinePurchaseInfoDisplayed());
-			assertTrue(detailItem.isInStorPurchaseInfoDisplayed());
-			assertTrue(detailItem.isWishListDisplayed());
-			assertTrue(detailItem.isTitleSameAsResultTitle(resultItemTitle));
-			
-			resultItem.displayResultsPage();
-		}
-	}
-	
-
 //	SORT Price: High to Low
 //	Input file: bestbuy34.txt
-	@Ignore
-	public void testProductSort() throws InterruptedException 
+	@Test
+	public void testSortByPriceDescending() throws InterruptedException 
 	{
 		String[] inputSortKey = inputData.split("\\s*-\\s*");
 
 		keyword = inputSortKey[0];
 		String inputSortKeyNumber = inputSortKey[1];
 
-		HomePage homePage = new HomePage(driver, keyword);
-
-		homePage.open();
-
-		homePage.typeKeyword();
-
-		ResultsPage resultsPage = homePage.clickSearchButton();
-
-		assertTrue(resultsPage.doesResultLabelIncludeKeyword(keyword));
-
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		
+		assertTrue(resultsPage.getResultLabel().toLowerCase().indexOf(keyword.toLowerCase())>= 0);
+		
 		assertTrue(resultsPage.isResultCountLabelDisplayed());
 
-		resultsPage.clickSortSuggestion(inputSortKeyNumber);
+		resultsPage.changeSortOrder(inputSortKeyNumber);
 		
-		ResultItem resultItem;
-		String savePrice = "";
+		Thread.sleep(2000);
 		
-		int countResultsPage = resultsPage.getCount();
-		
-		for (int i = 1; i <= countResultsPage; i++) {
-			resultItem = resultsPage.getResult(i);
+		for (int i = 2; i <= resultsPage.getCount(); i++) {
 
-			assertTrue(resultItem.isPriceDisplayed());
-			assertTrue(resultItem.isPriceValid());
-			if (i > 1)
-			{
-				assertTrue((savePrice.compareTo(resultItem.getPrice()) >= 0));
-			}
-			savePrice = resultItem.getPrice();
+			Double prePrice = resultsPage.getResult(i-1).getPrice();
+			Double currPrice = resultsPage.getResult(i).getPrice();
+			
+			assertTrue(prePrice >= currPrice);
 		}
 }
 
 //  Page Navigation	
-//  Input file: bestbuynull.txt
-//  use keyword 	
-	@Ignore 
+	@Ignore
 	public void testPageNavigate() throws InterruptedException
 	{
-		HomePage homePage = new HomePage(driver, keyword);
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
 
-		homePage.open();
-
-		homePage.setLanguageToEnglish();
-		
-		homePage.typeKeyword();
-
-		ResultsPage resultsPage = homePage.clickSearchButton();
-
-		assertTrue(resultsPage.doesResultLabelIncludeKeyword(keyword));
+		assertTrue(resultsPage.getResultLabel().indexOf(keyword) >= 0);
 
 		assertTrue(resultsPage.isResultCountLabelDisplayed());
 
 		resultsPage.clickPage("5"); // Page 5
-		assertTrue(resultsPage.isPageNumberHighlighted());
+		assertTrue(resultsPage.getHighlightedPage() == 5);
 
 		resultsPage.clickPage("6"); // Page 6
-		assertTrue(resultsPage.isPageNumberHighlighted());
+		assertTrue(resultsPage.getHighlightedPage() == 6);
 	}
 	
 //  Overview and Details&Specs 	
-//  use keyword 	
-	@Ignore 
+	@Ignore
 	public void testOverviewDetails() throws InterruptedException
 	{
 		int numberMultipleItems = 0;
@@ -251,46 +177,44 @@ public class ResultsPageScripts {
 		Random randomGenerator = new Random();
 		
 		ResultItem resultItem;
-		DetailItem detailItem;
-		String resultItemTitle;
+		DetailPage detailPage;
 
 		resultItem = resultsPage.getResult(randomGenerator.nextInt(resultsPage.getCount()));
 //		resultItem = resultsPage.getResult(1); /* For test with the 1st result item */
-		resultItemTitle = resultItem.getResultItemTitle();
 		
-		detailItem = resultItem.clickResult();
-		assertTrue(detailItem.isTitleSameAsResultTitle(resultItemTitle));
+		detailPage = resultItem.clickResult();
+		assertEquals(detailPage.getTitle(), resultItem.getTitle());
 
-		assertTrue(detailItem.isOverviewTabDispalyed());
+		assertTrue(detailPage.isOverviewTabDispalyed());
 		
 		System.out.println("\n*****      Overview       *****\n");
 				
-		int countOverview = detailItem.getCountOverview();
+		int countOverview = detailPage.getCountOverview();
 		
 		for (int i=1; i <= countOverview; i++)
 		{
-			if (detailItem.isOverviewSectionDisplayed(i)) /* 'Overview' or 'More Information' */
+			if (detailPage.isOverviewSectionDisplayed(i)) /* 'Overview' or 'More Information' */
 			{
-				assertTrue(detailItem.isInfoOfSectionDisplayed(i));
+				assertTrue(detailPage.isInfoOfSectionDisplayed(i));
 				
 				if (i == 2)
-					assertTrue(detailItem.isItemsMulti(i));
+					assertTrue(detailPage.isItemsMulti(i));
 			}
 		}
 		
-		detailItem.clickDetailsSpecs(); 
+		detailPage.clickDetailsSpecs(); 
 
-		assertTrue(detailItem.isDetailsSpecsTabDispalyed());
+		assertTrue(detailPage.isDetailsSpecsTabDispalyed());
 		
 		System.out.println("\n*****   Details & Specs   *****\n");
 		
-		int countDetailsSpecs = detailItem.getCountDetailsSpecs();
+		int countDetailsSpecs = detailPage.getCountDetailsSpecs();
 		
 		for (int i=0; i < countDetailsSpecs; i++)
 		{
-			if (detailItem.isTheLineFeatureSection(i))
+			if (detailPage.isTheLineFeatureSection(i))
 			{
-				numberMultipleItems = detailItem.countMultipleItems(i+1, detailItem.getCountDetailsSpecs());
+				numberMultipleItems = detailPage.countMultipleItems(i+1, detailPage.getCountDetailsSpecs());
 
 				assertTrue(numberMultipleItems > 0);
 

@@ -1,5 +1,4 @@
 package com.testproject.java.framework.pageobject;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -68,11 +67,20 @@ public class HomePage {
 				.visibilityOfElementLocated(By.xpath(Locators.searchButtonLocator)));
 	}
 
-	public ResultsPage clickSearchButton() 
+	public void clickSearchButton() 
 	{
 		getSearchButton().click();
-		ResultsPage resultsPage = new ResultsPage(mDriver);
-		return resultsPage;
+	}
+	
+	public ResultsPage search()
+	{
+		open();
+		
+		typeKeyword();
+		
+		clickSearchButton();
+		
+		return new ResultsPage(mDriver);
 	}
 	
 	public SearchSuggestion getSuggestion(WebDriver driver, int i)

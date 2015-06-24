@@ -1,6 +1,7 @@
 package com.testproject.java.framework.pageobject;
 
 import java.util.regex.Pattern;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,11 +15,9 @@ public class ResultItem {
 	int mResultIndex;
 	static int mResultIndexOnSale;
 
-	String keywordResultTitleLocatorStr;
 	String resultPriceLocatorStr;
 	String resultImageLocatorStr;
 	String resultItemTitleLocatorStr;
-	String resultsUrl;
 
 	public ResultItem(WebDriver driver, int resultIndex) {
 		mDriver = driver;
@@ -29,28 +28,23 @@ public class ResultItem {
 		else
 			mResultIndexOnSale++;			
 
-		keywordResultTitleLocatorStr = Locators.keywordResultTitleLocator + "["
-				+ mResultIndex + "]";
 		resultPriceLocatorStr = Locators.resultPriceLocator + "[" + mResultIndex + "]";
 		resultImageLocatorStr = Locators.resultImageLocator + "[" + mResultIndex + "]";
 		resultItemTitleLocatorStr = Locators.resultItemTitleLocator + "[" + mResultIndex + "]";
 	}
 
-	public WebElement getTitle() {
-		return mDriver.findElement(By.xpath(keywordResultTitleLocatorStr));
+	public String getTitle()
+	{
+		return mDriver.findElement(By.xpath(resultItemTitleLocatorStr)).getText().replace("Final Clearance", "").trim();
 	}
 	
-	public String getName() {
-		return getTitle().getText();
-	}
-
 	public Boolean doesNameIncludeKeyword(String keyword) {
-		String titleValue = getName().toUpperCase();
+		String titleValue = getTitle().toUpperCase();
 
 		return titleValue.indexOf(keyword.toUpperCase()) >= 0;
 	}
 
-	public String getPrice() {
+	public String getPriceText() {
 		return mDriver.findElement(By.xpath(resultPriceLocatorStr)).getText();
 	}
 	
@@ -59,9 +53,9 @@ public class ResultItem {
 				.isDisplayed();
 	}
 
-	public Boolean isPriceValid() {
-		return Double.parseDouble(Pattern.compile("\\$").matcher(getPrice())
-				.replaceAll(" ")) >= 0;
+	public Double getPrice() 
+	{
+		return Double.parseDouble(Pattern.compile("\\$").matcher(getPriceText()).replaceAll(" "));
 	}
 
 	public Boolean isResultItemOnSale() throws InterruptedException 
@@ -79,14 +73,7 @@ public class ResultItem {
 					
 		return bl;
 	}
-	
-	public String getResultItemTitle()
-	{
-		System.out.println("Product: " + mDriver.findElement(By.xpath(resultItemTitleLocatorStr)).getText());
-		
-		return mDriver.findElement(By.xpath(resultItemTitleLocatorStr)).getText();
-	}
-	
+
 	public WebElement getImage() {
 		return mDriver.findElement(By.xpath(resultImageLocatorStr));
 	}
@@ -104,18 +91,11 @@ public class ResultItem {
 						.matcher(srcValue).matches());
 	}
 	
-	public void displayResultsPage()
+	public DetailPage clickResult()
 	{
-		mDriver.get(resultsUrl); 		
-	}
-	
-	public DetailItem clickResult()
-	{
-		resultsUrl = mDriver.getCurrentUrl();
-		
 		getImage().click();
 		
-		return new DetailItem(mDriver);
+		return new DetailPage(mDriver);
 	}
 
 }
