@@ -1,5 +1,5 @@
 package com.testproject.java;
-
+//
 import static org.junit.Assert.*;
 
 import java.io.FileReader;
@@ -120,7 +120,7 @@ public class ResultsPageScripts {
 	
 //	SORT Price: High to Low
 //	Input file: bestbuy34.txt
-	@Test
+	@Ignore
 	public void testSortByPriceDescending() throws InterruptedException 
 	{
 		String[] inputSortKey = inputData.split("\\s*-\\s*");
@@ -164,34 +164,23 @@ public class ResultsPageScripts {
 		assertTrue(resultsPage.getHighlightedPage() == 6);
 	}
 	
-//  Overview and Details&Specs 	
+//  Overview tab 	
 	@Ignore
 	public void testOverviewDetails() throws InterruptedException
 	{
-		int numberMultipleItems = 0;
-		
-		ResultsPage resultsPage = new ResultsPage(driver);
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
 
-		resultsPage.open(keyword);
+		ResultItem resultItem = resultsPage.getResult(1); 
 
-		Random randomGenerator = new Random();
+		String titleResultItem = resultItem.getTitle();
 		
-		ResultItem resultItem;
-		DetailPage detailPage;
+		DetailPage detailPage = resultItem.clickResult();
+		
+		assertEquals(detailPage.getTitle(), titleResultItem);
 
-		resultItem = resultsPage.getResult(randomGenerator.nextInt(resultsPage.getCount()));
-//		resultItem = resultsPage.getResult(1); /* For test with the 1st result item */
+		assertTrue(detailPage.visibilityOverviewTab());
 		
-		detailPage = resultItem.clickResult();
-		assertEquals(detailPage.getTitle(), resultItem.getTitle());
-
-		assertTrue(detailPage.isOverviewTabDispalyed());
-		
-		System.out.println("\n*****      Overview       *****\n");
-				
-		int countOverview = detailPage.getCountOverview();
-		
-		for (int i=1; i <= countOverview; i++)
+		for (int i=1; i <= detailPage.getCountOverview(); i++)
 		{
 			if (detailPage.isOverviewSectionDisplayed(i)) /* 'Overview' or 'More Information' */
 			{
@@ -201,15 +190,29 @@ public class ResultsPageScripts {
 					assertTrue(detailPage.isItemsMulti(i));
 			}
 		}
+	}
+	
+//  Details & Specs tab 	
+	@Test
+	public void testDetailsSpecsTab() throws InterruptedException
+	{
+		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+
+		ResultItem resultItem = resultsPage.getResult(1); 
+
+		String titleResultItem = resultItem.getTitle();
+		
+		DetailPage detailPage = resultItem.clickResult();
+
+		assertEquals(detailPage.getTitle(), titleResultItem);
 		
 		detailPage.clickDetailsSpecs(); 
 
-		assertTrue(detailPage.isDetailsSpecsTabDispalyed());
-		
-		System.out.println("\n*****   Details & Specs   *****\n");
+		assertTrue(detailPage.visibilityDetailsSpecsTab());
 		
 		int countDetailsSpecs = detailPage.getCountDetailsSpecs();
-		
+		int numberMultipleItems = 0;		
+
 		for (int i=0; i < countDetailsSpecs; i++)
 		{
 			if (detailPage.isTheLineFeatureSection(i))

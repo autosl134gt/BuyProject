@@ -1,5 +1,5 @@
 package com.testproject.java.framework.pageobject;
-
+//
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -87,7 +87,7 @@ public class DetailPage {
 		return mDriver.findElement(By.xpath(Locators.detailItemTitleLocator)).getText().replace("Final Clearance", "").trim();
 	}
 	
-	public Boolean isOverviewTabDispalyed()
+	public Boolean visibilityOverviewTab()
 	{
 		return (mDriver.findElement(By.xpath(Locators.detailOverviewTabLocator))).isDisplayed();
 	}
@@ -108,8 +108,6 @@ public class DetailPage {
 			detailOverviewItemLocatorStr = Locators.detailOverviewItemLocator + "[" + i + "]/h4"; 
 			
 			detailOverviewSection = mDriver.findElement(By.xpath(detailOverviewItemLocatorStr));
-
-			System.out.println("Section name==" + detailOverviewSection.getText());			
 			
 			lengthSection = detailOverviewSection.getText().length();
 			
@@ -126,8 +124,6 @@ public class DetailPage {
 	
 	public Boolean isItemsMulti(int i)
 	{
-		System.out.println("        Number of items=" + mDriver.findElements(By.xpath(Locators.detailOverviewMultiItemLocator)).size());
-		
 		return mDriver.findElements(By.xpath(Locators.detailOverviewMultiItemLocator)).size() > 0;
 	}
 	
@@ -136,7 +132,7 @@ public class DetailPage {
 		mDriver.findElement(By.xpath("//li[@class='ui-tab']")).click();
 	}
 	
-	public Boolean isDetailsSpecsTabDispalyed()
+	public Boolean visibilityDetailsSpecsTab()
 	{
 		return (mDriver.findElement(By.xpath(Locators.detailDetailsSpecsTabLocator))).isDisplayed();
 	}
@@ -168,9 +164,6 @@ public class DetailPage {
 			else
 				break;
 		}
-
-		System.out.println("Feature Section name='" + nameSection + "'");
-		System.out.println("        Number of Items=" + numberMultipleItems);
 
 		return numberMultipleItems;
 	}

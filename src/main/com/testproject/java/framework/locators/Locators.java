@@ -1,5 +1,5 @@
 package com.testproject.java.framework.locators;
-
+//
 public abstract class Locators {
 
 //DetailItem

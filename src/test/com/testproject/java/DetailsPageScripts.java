@@ -1,5 +1,5 @@
 package com.testproject.java;
-
+//
 import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +21,7 @@ public class DetailsPageScripts {
 	static WebDriver driver;
 
 	String keyword = "Galaxy";
-//	String keyword = "Galaxy S6";
+//	String keyword = "Galaxy S6"; 
 //	String keyword = "iPhone";
 //	String keyword = "iPhone 6";
 
