@@ -1,5 +1,5 @@
 package com.testproject.java.framework.pageobject;
-//
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,13 +11,8 @@ import com.testproject.java.framework.locators.*;
 public class DetailPage { 
 	
 	WebDriver mDriver;
-	WebElement detailOverviewSection;
-
+	
 	String srcValue;
-	String detailOverviewItemLocatorStr; 
-	String detailAttrKeyLocatorStr;
-	String detailAttrValueLocatorStr;
-	String nameSection;
 	
 	int lengthSectionSubInfo;
 	int lengthSection;
@@ -99,7 +94,7 @@ public class DetailPage {
 		
 	public Boolean isOverviewSectionDisplayed(int i)
 	{		
-		detailOverviewItemLocatorStr = Locators.detailOverviewItemLocator + "[" + i + "]"; 
+		String detailOverviewItemLocatorStr = Locators.detailOverviewItemLocator + "[" + i + "]"; 
 		
 		lengthSectionSubInfo = mDriver.findElement(By.xpath(detailOverviewItemLocatorStr)).getText().length();
 		
@@ -107,7 +102,7 @@ public class DetailPage {
 		{
 			detailOverviewItemLocatorStr = Locators.detailOverviewItemLocator + "[" + i + "]/h4"; 
 			
-			detailOverviewSection = mDriver.findElement(By.xpath(detailOverviewItemLocatorStr));
+			WebElement detailOverviewSection = mDriver.findElement(By.xpath(detailOverviewItemLocatorStr));
 			
 			lengthSection = detailOverviewSection.getText().length();
 			
@@ -144,8 +139,6 @@ public class DetailPage {
 	
 	public Boolean isTheLineFeatureSection(int i)
 	{		
-		nameSection = mDriver.findElements(By.xpath(Locators.detailAttrKeyLocator)).get(i).getText();
-
 		return 	(mDriver.findElements(By.xpath(Locators.detailAttrKeyLocator)).get(i).getText().length() > 0)
 				&&
 				(mDriver.findElements(By.xpath(Locators.detailAttrValueLocator)).get(i).getText().length() == 0);

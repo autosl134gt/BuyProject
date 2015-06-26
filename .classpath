@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Selenium/JAR/selenium-server-standalone-2.45.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="src" output="target/classes" path="src/main"/>
+	<classpathentry kind="lib" path="C:/Selenium/JAR/opencsv/opencsv-3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

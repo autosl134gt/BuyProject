@@ -1,6 +1,4 @@
 package com.testproject.java;
-//
-//CSV file 
 
 import static org.junit.Assert.*;
 
@@ -44,25 +42,35 @@ public class HomePageScripts {
 	{
 		this.keyword = keyword;
 	}
-	
+/*	
+	@Parameters
+	public static Collection<Object[]> data() throws IOException
+	{
+		CSVFile csvFile = new CSVFile(filePath);
+				    
+		Object[][] data = csvFile.getData();
+		
+		return Arrays.asList(data);
+	}
+*/	
 	@Parameters
 	public static Collection<Object[]> data() throws IOException
 	{
 		CSVReader csvReader;
-		List<String[]> allLines;   
-		    
+		List<String[]> allLines;
+		
 		csvReader = new CSVReader(new FileReader(filePath));
 		allLines = csvReader.readAll();
 		csvReader.close();
+		
+		String [][] stringArray = new String[allLines.size()][];		
 
-		String [][] stringArray = new String[allLines.size()][];     
-   
-		for (int i = 0; i < allLines.size(); i++)    
-		{ 
+		for (int i = 0; i < allLines.size(); i++)
+		{
 			stringArray[i] = new String[1];
 			stringArray[i][0] = allLines.get(i)[0];
-		}                   
-		    
+		}
+		
 		Object[][] data = stringArray;
 		
 		return Arrays.asList(data);
@@ -87,16 +95,15 @@ public class HomePageScripts {
 		driver.quit();
 	}
 
-	@Test
+	@Ignore
 	public void testSuggestionsCorrect() throws InterruptedException 
 	{
-//		Thread.sleep(1000);
 		
-		HomePage homePage = new HomePage(driver, keyword);
+		HomePage homePage = new HomePage(driver);
 
 		homePage.open();
 
-		homePage.typeKeyword();
+		homePage.typeKeyword(keyword);
 
 		SearchSuggestion searchSuggestion = homePage.getSuggestion(driver, 5);
 
@@ -134,10 +141,10 @@ public class HomePageScripts {
 		assertTrue(resultsPage.getCount() == 32);
 	}
 
-	@Ignore
+	@Test
 	public void testSearchWithKeyword() throws InterruptedException 
 	{
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 
 		assertTrue(resultsPage.doesResultLabelIncludeKeyword(keyword));
 

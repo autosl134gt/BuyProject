@@ -1,5 +1,5 @@
 package com.testproject.java;
-//
+
 import static org.junit.Assert.*;
 
 import java.io.FileReader;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
@@ -24,8 +23,10 @@ import com.opencsv.CSVReader;
 //import com.opencsv.CSVWriter;
 import com.testproject.java.framework.pageobject.DetailPage;
 import com.testproject.java.framework.pageobject.HomePage;
+import com.testproject.java.framework.pageobject.PageElement;
 import com.testproject.java.framework.pageobject.ResultItem;
 import com.testproject.java.framework.pageobject.ResultsPage;
+import com.testproject.java.framework.pageobject.SortBox;
 
 @RunWith(value = Parameterized.class)
 public class ResultsPageScripts {
@@ -38,7 +39,6 @@ public class ResultsPageScripts {
 //	String keyword = "iPhone 6";
 
 	private String inputData;
-	String suggestionValue;
 
 //CSV input	
 //	private static String filePath = "D:\\DT\\bestbuy2.txt"; 		/* SORT- testProductSummary() 		*/
@@ -50,7 +50,18 @@ public class ResultsPageScripts {
 	{
 		this.inputData = inputData;
 	}
-
+/*
+	@Parameters
+	public static Collection<Object[]> data() throws IOException
+	{
+		CSVFile csvFile = new CSVFile(filePath);
+	    
+		Object[][] data = csvFile.getData();
+		
+		return Arrays.asList(data);
+	}
+*/
+	
 	@Parameters
 	public static Collection<Object[]> data() throws IOException
 	{
@@ -96,11 +107,11 @@ public class ResultsPageScripts {
 	@Ignore
 	public void testProductSummary() throws InterruptedException 
 	{
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 		
 		assertTrue(resultsPage.getResultLabel().indexOf(keyword) >= 0);
 
-		assertTrue(resultsPage.isResultCountLabelDisplayed());
+		assertTrue(resultsPage.visibilityResultCountLabel());
 
 		ResultItem resultItem;
 
@@ -128,13 +139,13 @@ public class ResultsPageScripts {
 		keyword = inputSortKey[0];
 		String inputSortKeyNumber = inputSortKey[1];
 
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 		
 		assertTrue(resultsPage.getResultLabel().toLowerCase().indexOf(keyword.toLowerCase())>= 0);
 		
-		assertTrue(resultsPage.isResultCountLabelDisplayed());
-
-		resultsPage.changeSortOrder(inputSortKeyNumber);
+		assertTrue(resultsPage.visibilityResultCountLabel());
+		
+		new SortBox(driver).changeSortOrder(inputSortKeyNumber);
 		
 		Thread.sleep(2000);
 		
@@ -148,27 +159,29 @@ public class ResultsPageScripts {
 }
 
 //  Page Navigation	
-	@Ignore
+	@Test
 	public void testPageNavigate() throws InterruptedException
 	{
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 
 		assertTrue(resultsPage.getResultLabel().indexOf(keyword) >= 0);
 
-		assertTrue(resultsPage.isResultCountLabelDisplayed());
+		assertTrue(resultsPage.visibilityResultCountLabel());
 
-		resultsPage.clickPage("5"); // Page 5
-		assertTrue(resultsPage.getHighlightedPage() == 5);
+		PageElement pageElement = new PageElement(driver);
+		
+		pageElement.clickPage("5"); 
+		assertTrue(pageElement.getHighlightedPage() == 5);
 
-		resultsPage.clickPage("6"); // Page 6
-		assertTrue(resultsPage.getHighlightedPage() == 6);
+		pageElement.clickPage("6"); 
+		assertTrue(pageElement.getHighlightedPage() == 6);
 	}
 	
 //  Overview tab 	
 	@Ignore
 	public void testOverviewDetails() throws InterruptedException
 	{
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 
 		ResultItem resultItem = resultsPage.getResult(1); 
 
@@ -193,10 +206,10 @@ public class ResultsPageScripts {
 	}
 	
 //  Details & Specs tab 	
-	@Test
+	@Ignore
 	public void testDetailsSpecsTab() throws InterruptedException
 	{
-		ResultsPage resultsPage = new HomePage(driver, keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(keyword);
 
 		ResultItem resultItem = resultsPage.getResult(1); 
 

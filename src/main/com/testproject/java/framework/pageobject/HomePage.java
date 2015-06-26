@@ -1,5 +1,5 @@
 package com.testproject.java.framework.pageobject;
-//
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,8 +11,6 @@ import com.testproject.java.framework.locators.*;
 public class HomePage {
 
 	WebDriver mDriver;
-	String mKeyword;
-	String pageUrl = "http://www.bestbuy.ca/";
 	
 	WebDriverWait wait;
 
@@ -23,16 +21,10 @@ public class HomePage {
 		wait = new WebDriverWait(mDriver, 10);
 	}
 
-	public HomePage(WebDriver driver, String keyword) 
-	{
-		mDriver = driver;
-		mKeyword = keyword;
-
-		wait = new WebDriverWait(mDriver, 10);
-	}
-
 	public void open() 
 	{
+		String pageUrl = "http://www.bestbuy.ca/";
+		
 		mDriver.get(pageUrl);
 	}
 
@@ -44,11 +36,11 @@ public class HomePage {
 		}
 	}
 	
-	public void typeKeyword() 
+	public void typeKeyword(String keyword) 
 	{
 		getSearchField().click();
 
-		getSearchField().sendKeys(mKeyword);
+		getSearchField().sendKeys(keyword);
 	}
 
 	public int getSuggestionsCount() 
@@ -73,11 +65,11 @@ public class HomePage {
 		getSearchButton().click();
 	}
 	
-	public ResultsPage search()
+	public ResultsPage search(String keyword)
 	{
 		open();
 		
-		typeKeyword();
+		typeKeyword(keyword);
 		
 		clickSearchButton();
 		

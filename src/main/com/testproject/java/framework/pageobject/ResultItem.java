@@ -1,5 +1,5 @@
 package com.testproject.java.framework.pageobject;
-//
+
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
@@ -12,7 +12,6 @@ public class ResultItem {
 
 	WebDriver mDriver;
 
-	int mResultIndex;
 	static int mResultIndexOnSale;
 
 	String resultPriceLocatorStr;
@@ -20,17 +19,17 @@ public class ResultItem {
 	String resultItemTitleLocatorStr;
 
 	public ResultItem(WebDriver driver, int resultIndex) {
+
 		mDriver = driver;
 
-		mResultIndex = resultIndex;
 		if (resultIndex == 1)
 			mResultIndexOnSale = resultIndex;
 		else
 			mResultIndexOnSale++;			
 
-		resultPriceLocatorStr = Locators.resultPriceLocator + "[" + mResultIndex + "]";
-		resultImageLocatorStr = Locators.resultImageLocator + "[" + mResultIndex + "]";
-		resultItemTitleLocatorStr = Locators.resultItemTitleLocator + "[" + mResultIndex + "]";
+		resultPriceLocatorStr = Locators.resultPriceLocator + "[" + resultIndex + "]";
+		resultImageLocatorStr = Locators.resultImageLocator + "[" + resultIndex + "]";
+		resultItemTitleLocatorStr = Locators.resultItemTitleLocator + "[" + resultIndex + "]";
 	}
 
 	public String getTitle()

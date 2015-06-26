@@ -1,5 +1,5 @@
 package com.testproject.java.framework.pageobject;
-//
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,17 +10,14 @@ import com.testproject.java.framework.locators.*;
 public class SearchSuggestion {
 
 	WebDriver mDriver;
-	String mKeyword;
 
-	WebDriverWait wait;
-	
 	WebElement mSuggestion;
 	
 	public SearchSuggestion(WebDriver driver, int i) 
 	{
 		mDriver = driver;
 
-		wait = new WebDriverWait(mDriver, 10);
+		WebDriverWait wait = new WebDriverWait(mDriver, 10);
 	
 		mSuggestion = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(" + Locators.suggestionsAllLocator + ")[" + i + "]")));
 	}

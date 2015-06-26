@@ -1,5 +1,5 @@
 package com.testproject.java;
-//
+
 import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
@@ -48,7 +48,7 @@ public class DetailsPageScripts {
 	@Test
 	public void testProductDetail() throws InterruptedException 
 	{
-		ResultsPage resultsPage = new HomePage(driver, this.keyword).search();
+		ResultsPage resultsPage = new HomePage(driver).search(this.keyword);
 
 		ResultItem resultItem = resultsPage.getResult(1);	
 	
