@@ -38,10 +38,10 @@ public class HomePageScripts {
 	
 	private static String filePath = "D:\\DT\\bestbuy.txt";
 	
-	public HomePageScripts(String keyword)
-	{
-		this.keyword = keyword;
-	}
+//	public HomePageScripts(String keyword)
+//	{
+//		this.keyword = keyword;
+//	}
 /*	
 	@Parameters
 	public static Collection<Object[]> data() throws IOException
@@ -52,7 +52,9 @@ public class HomePageScripts {
 		
 		return Arrays.asList(data);
 	}
-*/	
+*/
+	
+
 	@Parameters
 	public static Collection<Object[]> data() throws IOException
 	{
